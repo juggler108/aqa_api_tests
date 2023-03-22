@@ -1,27 +1,36 @@
-import requests
-from src.baseclasses.response_user_data import ResponseUserData
-from src.schemes.user_schemes import UsersDataSchema
-from configuration import SERVICE_API_URL
+import pytest
+from src.baseclasses.response_data import ResponseData
+from src.schemes.user_schemes import UserDataSchema
+from src.schemes.resource_schemes import ResourceDataSchema
 
 
 class TestAPIMainPage:
-    # def test_get_list_users(self, get_users):
-    #     ResponseUserData(get_users + "users?page=2").assert_status_code([200]).validate(UsersDataSchema)
+    @pytest.mark.parametrize("get_users", ["get_list_users"], indirect=True)
+    def test_get_list_users(self, get_users):
+        test_object = ResponseData(get_users)
+        test_object.assert_status_code([200]).validate(UserDataSchema)
 
-    def test_get_list_users(self):
-        response = requests.get(url=f"{SERVICE_API_URL}users?page=2")
-        test_object = ResponseUserData(response)
-        test_object.assert_status_code([200]).validate(UsersDataSchema)
+    @pytest.mark.parametrize("get_users", ["get_single_user"], indirect=True)
+    def test_get_single_user(self, get_users):
+        test_object = ResponseData(get_users)
+        test_object.assert_status_code([200]).validate(UserDataSchema)
 
-    def test_get_single_user(self):
-        response = requests.get(url=f"{SERVICE_API_URL}users/2")
-        test_object = ResponseUserData(response)
-        test_object.assert_status_code([200]).validate(UsersDataSchema)
+    @pytest.mark.parametrize("get_users", ["get_single_user_not_found"], indirect=True)
+    def test_get_single_user_not_found(self, get_users):
+        test_object = ResponseData(get_users)
+        test_object.assert_status_code([404]).validate_not_found()
 
-    def test_get_single_user_not_found(self):
-        response = requests.get(url=f"{SERVICE_API_URL}users/23")
-        test_object = ResponseUserData(response)
-        test_object.assert_status_code([404])
+    @pytest.mark.parametrize("get_resources", ["get_list_resource"], indirect=True)
+    def test_get_list_resource(self, get_resources):
+        test_object = ResponseData(get_resources)
+        test_object.assert_status_code([200]).validate(ResourceDataSchema)
 
+    @pytest.mark.parametrize("get_resources", ["get_single_resource"], indirect=True)
+    def test_get_single_resource(self, get_resources):
+        test_object = ResponseData(get_resources)
+        test_object.assert_status_code([200]).validate(ResourceDataSchema)
 
-# {'page': 2, 'per_page': 6, 'total': 12, 'total_pages': 2, 'data': [{'id': 7, 'email': 'michael.lawson@reqres.in', 'first_name': 'Michael', 'last_name': 'Lawson', 'avatar': 'https://reqres.in/img/faces/7-image.jpg'}, {'id': 8, 'email': 'lindsay.ferguson@reqres.in', 'first_name': 'Lindsay', 'last_name': 'Ferguson', 'avatar': 'https://reqres.in/img/faces/8-image.jpg'}, {'id': 9, 'email': 'tobias.funke@reqres.in', 'first_name': 'Tobias', 'last_name': 'Funke', 'avatar': 'https://reqres.in/img/faces/9-image.jpg'}, {'id': 10, 'email': 'byron.fields@reqres.in', 'first_name': 'Byron', 'last_name': 'Fields', 'avatar': 'https://reqres.in/img/faces/10-image.jpg'}, {'id': 11, 'email': 'george.edwards@reqres.in', 'first_name': 'George', 'last_name': 'Edwards', 'avatar': 'https://reqres.in/img/faces/11-image.jpg'}, {'id': 12, 'email': 'rachel.howell@reqres.in', 'first_name': 'Rachel', 'last_name': 'Howell', 'avatar': 'https://reqres.in/img/faces/12-image.jpg'}], 'support': {'url': 'https://reqres.in/#support-heading', 'text': 'To keep ReqRes free, contributions towards server costs are appreciated!'}}
+    @pytest.mark.parametrize("get_resources", ["get_single_resource_not_found"], indirect=True)
+    def test_get_single_resource_not_found(self, get_resources):
+        test_object = ResponseData(get_resources)
+        test_object.assert_status_code([404]).validate_not_found()

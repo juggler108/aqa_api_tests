@@ -2,3 +2,5 @@
 /tests/.pytest_cache/
 /tests/geckodriver.log
 .idea
+/geckodriver.log
+/.pytest_cache/
