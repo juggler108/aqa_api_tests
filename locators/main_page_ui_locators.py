@@ -6,6 +6,7 @@ class MainPageUILocators:
     REQUEST_URL = (By.CSS_SELECTOR, ".request .url")
     RESPONSE_CODE = (By.CSS_SELECTOR, ".response-code")
     OUTPUT_RESPONSE = (By.CSS_SELECTOR, "pre[data-key='output-response']")
+    DELAYED_ELEMENT = (By.CSS_SELECTOR, "div[class='spinner'][hidden='true']")
 
     # requests
     LIST_USERS_ENDPOINT = (By.CSS_SELECTOR, "li[data-id='users']")
