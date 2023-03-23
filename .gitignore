@@ -4,3 +4,4 @@
 .idea
 /geckodriver.log
 /.pytest_cache/
+/tests/mainpageapi/.pytest_cache/

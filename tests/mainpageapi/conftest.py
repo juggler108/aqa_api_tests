@@ -27,3 +27,17 @@ def get_resources(request):
     elif request.param == "get_single_resource_not_found":
         response = requests.get(url=f"{SERVICE_API_URL}unknown/23")
         return response
+
+
+@pytest.fixture
+def update_new_user():
+    user_data = {
+        "name": "morpheus",
+        "job": "zion resident"
+    }
+    response = requests.put(url=f"{SERVICE_API_URL}users/2", data=user_data)
+    name = response.json()["name"]
+    job = response.json()["job"]
+    assert name == "morpheus", "New users name did not create"
+    assert job == "leader", "New users job did not create"
+    return response

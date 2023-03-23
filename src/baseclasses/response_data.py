@@ -2,7 +2,7 @@ from pydantic import ValidationError
 from src.enums.global_enums import GlobalErrorMessages
 
 
-class ResponseData:
+class Response:
     def __init__(self, response):
         self.response = response
         self.response_json = response.json()
@@ -15,6 +15,13 @@ class ResponseData:
                     schema.parse_obj(item)
             else:
                 schema.parse_obj(self.response_json["data"])
+            return self
+        except ValidationError:
+            raise AssertionError("Could not map received object to pydantic schema")
+
+    def validate_user(self, schema):
+        try:
+            schema.parse_obj(self.response_json)
             return self
         except ValidationError:
             raise AssertionError("Could not map received object to pydantic schema")
