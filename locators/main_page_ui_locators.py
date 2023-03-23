@@ -2,6 +2,12 @@ from selenium.webdriver.common.by import By
 
 
 class MainPageUILocators:
+    # fields
+    REQUEST_URL = (By.CSS_SELECTOR, ".request .url")
+    RESPONSE_CODE = (By.CSS_SELECTOR, ".response-code")
+    OUTPUT_RESPONSE = (By.CSS_SELECTOR, "pre[data-key='output-response']")
+
+    # requests
     LIST_USERS_ENDPOINT = (By.CSS_SELECTOR, "li[data-id='users']")
     SINGLE_USER_ENDPOINT = (By.CSS_SELECTOR, "li[data-id='users-single']")
     SINGLE_USER_NOT_FOUND_ENDPOINT = (By.CSS_SELECTOR, "li[data-id='users-single-not-found']")

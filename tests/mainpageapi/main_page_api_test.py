@@ -51,26 +51,9 @@ class TestAPIMainPage:
         assert name == "morpheus", "New users name did not create"
         assert job == "leader", "New users job did not create"
 
-    def test_update_user_put(self):
-        user_data = {
-            "name": "morpheus",
-            "job": "zion resident"
-        }
-        response = requests.put(url=f"{SERVICE_API_URL}users/2", data=user_data)
-        test_object = Response(response)
-        test_object.assert_status_code([200]).validate_user(UpdateUserSchema)
-        name = test_object.response_json["name"]
-        job = test_object.response_json["job"]
-        assert name == "morpheus", "New users name did not create"
-        assert job == "zion resident", "New users job did not create"
-
-    def test_update_user_patch(self):
-        user_data = {
-            "name": "morpheus",
-            "job": "zion resident"
-        }
-        response = requests.patch(url=f"{SERVICE_API_URL}users/2", data=user_data)
-        test_object = Response(response)
+    @pytest.mark.parametrize("update_new_user", ["put", "patch"], indirect=True)
+    def test_update_user_put_patch(self, update_new_user):
+        test_object = Response(update_new_user)
         test_object.assert_status_code([200]).validate_user(UpdateUserSchema)
         name = test_object.response_json["name"]
         job = test_object.response_json["job"]
