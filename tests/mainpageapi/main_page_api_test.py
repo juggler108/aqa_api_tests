@@ -10,32 +10,32 @@ from src.schemes.resource_schemes import ResourceDataSchema
 class TestAPIMainPage:
     @pytest.mark.parametrize("get_users", ["get_list_users"], indirect=True)
     def test_get_list_users(self, get_users):
-        test_object = Response(get_users)
+        test_object = Response(get_users[0])
         test_object.assert_status_code([200]).validate(UserDataSchema)
 
     @pytest.mark.parametrize("get_users", ["get_single_user"], indirect=True)
     def test_get_single_user(self, get_users):
-        test_object = Response(get_users)
+        test_object = Response(get_users[0])
         test_object.assert_status_code([200]).validate(UserDataSchema)
 
     @pytest.mark.parametrize("get_users", ["get_single_user_not_found"], indirect=True)
     def test_get_single_user_not_found(self, get_users):
-        test_object = Response(get_users)
+        test_object = Response(get_users[0])
         test_object.assert_status_code([404]).validate_not_found()
 
     @pytest.mark.parametrize("get_resources", ["get_list_resource"], indirect=True)
     def test_get_list_resource(self, get_resources):
-        test_object = Response(get_resources)
+        test_object = Response(get_resources[0])
         test_object.assert_status_code([200]).validate(ResourceDataSchema)
 
     @pytest.mark.parametrize("get_resources", ["get_single_resource"], indirect=True)
     def test_get_single_resource(self, get_resources):
-        test_object = Response(get_resources)
+        test_object = Response(get_resources[0])
         test_object.assert_status_code([200]).validate(ResourceDataSchema)
 
     @pytest.mark.parametrize("get_resources", ["get_single_resource_not_found"], indirect=True)
     def test_get_single_resource_not_found(self, get_resources):
-        test_object = Response(get_resources)
+        test_object = Response(get_resources[0])
         test_object.assert_status_code([404]).validate_not_found()
 
     def test_create_new_user(self):
@@ -53,7 +53,7 @@ class TestAPIMainPage:
 
     @pytest.mark.parametrize("update_new_user", ["put", "patch"], indirect=True)
     def test_update_user_put_patch(self, update_new_user):
-        test_object = Response(update_new_user)
+        test_object = Response(update_new_user[0])
         test_object.assert_status_code([200]).validate_user(UpdateUserSchema)
         name = test_object.response_json["name"]
         job = test_object.response_json["job"]
