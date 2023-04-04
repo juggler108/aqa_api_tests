@@ -7,8 +7,9 @@ class Response:
         self.response = response
         self.response_json = response.json()
         self.response_status = response.status_code
+        self.parsed_object = None
 
-    def validate(self, schema):
+    def validate_user_data(self, schema):
         try:
             if isinstance(self.response_json["data"], list):
                 for item in self.response_json["data"]:
@@ -21,10 +22,14 @@ class Response:
 
     def validate_user(self, schema):
         try:
-            schema.parse_obj(self.response_json)
+            parsed_object = schema.parse_obj(self.response_json)
+            self.parsed_object = parsed_object
             return self
         except ValidationError:
             raise AssertionError("Could not map received object to pydantic schema")
+
+    def get_parsed_object(self):
+        return self.parsed_object
 
     def validate_not_found(self):
         assert self.response_json == {}, "Output response of single user not found request does not match with {}"

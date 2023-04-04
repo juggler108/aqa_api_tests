@@ -6,3 +6,6 @@
 /.pytest_cache/
 /tests/mainpageapi/.pytest_cache/
 /example.py
+/allureress/
+/allureressui/
+/debug.py

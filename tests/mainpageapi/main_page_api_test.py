@@ -3,7 +3,7 @@ import requests
 from configuration import SERVICE_API_URL
 from src.baseclasses.response_data import Response
 from src.schemes.user_schemes import UserDataSchema, CreateUserSchema, UpdateUserSchema, \
-    RegisterMewUserSuccessfulSchema, RegisterOrLoginUserUnsuccessfulSchema, LoginUserSuccessfulSchema
+    RegisterMewUserSuccessfulSchema, RegisterOrLoginUserUnsuccessfulSchema, LoginUserSuccessfulSchema, UserListSchema
 from src.schemes.resource_schemes import ResourceDataSchema
 
 
@@ -11,12 +11,15 @@ class TestAPIMainPage:
     @pytest.mark.parametrize("get_users", ["get_list_users"], indirect=True)
     def test_get_list_users(self, get_users):
         test_object = Response(get_users[0])
-        test_object.assert_status_code([200]).validate(UserDataSchema)
+        test_object.assert_status_code([200]).validate_user(UserListSchema).validate_user_data(UserDataSchema)
+        # parsed_object: UserListSchema = test_object.parsed_object
+        # for i in parsed_object.data:
+        #     print(i.first_name)
 
     @pytest.mark.parametrize("get_users", ["get_single_user"], indirect=True)
     def test_get_single_user(self, get_users):
         test_object = Response(get_users[0])
-        test_object.assert_status_code([200]).validate(UserDataSchema)
+        test_object.assert_status_code([200]).validate_user_data(UserDataSchema)
 
     @pytest.mark.parametrize("get_users", ["get_single_user_not_found"], indirect=True)
     def test_get_single_user_not_found(self, get_users):
@@ -26,12 +29,12 @@ class TestAPIMainPage:
     @pytest.mark.parametrize("get_resources", ["get_list_resource"], indirect=True)
     def test_get_list_resource(self, get_resources):
         test_object = Response(get_resources[0])
-        test_object.assert_status_code([200]).validate(ResourceDataSchema)
+        test_object.assert_status_code([200]).validate_user_data(ResourceDataSchema)
 
     @pytest.mark.parametrize("get_resources", ["get_single_resource"], indirect=True)
     def test_get_single_resource(self, get_resources):
         test_object = Response(get_resources[0])
-        test_object.assert_status_code([200]).validate(ResourceDataSchema)
+        test_object.assert_status_code([200]).validate_user_data(ResourceDataSchema)
 
     @pytest.mark.parametrize("get_resources", ["get_single_resource_not_found"], indirect=True)
     def test_get_single_resource_not_found(self, get_resources):
@@ -105,4 +108,4 @@ class TestAPIMainPage:
     def test_delayed_get_list_users(self):
         response = requests.get(url=f"{SERVICE_API_URL}users?delay=3")
         test_object = Response(response)
-        test_object.assert_status_code([200]).validate(UserDataSchema)
+        test_object.assert_status_code([200]).validate_user_data(UserDataSchema)
